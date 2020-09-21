@@ -23,20 +23,26 @@ data_table <- function(data, options = list(), ..., filter = "top", style = "def
     data$owner <- glue::glue_data(data, '<a rel="noopener" target="_blank" href="https://github.com/{owner}">{owner}</a>')
   }
   default_opts <- list(pageLength = 25,
-    dom = "tip",
-    columnDefs = list(
-      list(targets = "_all", orderSequence = c("desc", "asc"))))
-
+                       dom = "tip",
+                       columnDefs = list(
+                         list(targets = "_all", orderSequence = c("desc", "asc"))))
+  
   options <- modifyList(options, default_opts)
-  datatable(data,
-    ...,
-    options = options,
-    filter = filter,
-    style = style,
-    autoHideNavigation = autoHideNavigation,
-    rownames = rownames,
-    escape = escape) %>%
-  formatDate(which(map_lgl(data, inherits, "POSIXct")), "toLocaleString")
+  
+  dt <- datatable(data,
+                  ...,
+                  options = options,
+                  filter = filter,
+                  style = style,
+                  autoHideNavigation = autoHideNavigation,
+                  rownames = rownames,
+                  escape = escape)
+  
+  if (any(map_lgl(data, inherits, "POSIXct"))) {
+    dt <- dt %>%
+      formatDate(which(map_lgl(data, inherits, "POSIXct")), "toLocaleString")
+  }
+  dt
 }
 
 #' Plot a sparkline table
@@ -47,9 +53,9 @@ data_table <- function(data, options = list(), ..., filter = "top", style = "def
 sparkline_table <- function(data, sparkline_column, ...) {
   table <- data_table(data, ...)
   table$x$options$columnDefs <- append(table$x$options$columnDefs,
-      list(list(
-        targets = sparkline_column - 1L,
-        render = JS("
+                                       list(list(
+                                         targets = sparkline_column - 1L,
+                                         render = JS("
           function(data, type, row, meta) {
             return '<span class=spark>' + data + '</span>'
           }"))))

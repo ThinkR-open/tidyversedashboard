@@ -3,12 +3,12 @@ output:
   flexdashboard::flex_dashboard:
     orientation: rows
     vertical_layout: fill
-    theme: paper
+    theme: yeti
     source_code: "https://github.com/jimhester/tidyversedashboard"
 params:
   title:
     label: Title of report
-    value: Tidyverse dashboard
+    value: ThinkR dashboard
     input: text
   start: 
     label: Start date of report
@@ -65,7 +65,7 @@ if (!is.null(pr_data)) {
   prs <- pr_data %>% filter(updated >= start) %>%
     mutate(reviewer = map2(reviews, comments, function(reviews, comments) unique(c(reviews$reviewer, comments$commenter)))) %>%
     select(owner, repo, issue, author, created, updated, reviewer) %>%
-    unnest() %>%
+    unnest(cols = reviewer) %>%
     filter(reviewer != author, reviewer != "codecov.io") %>%
     mutate(
       reviewer = github_user_home(reviewer),
