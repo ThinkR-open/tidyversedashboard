@@ -36,6 +36,7 @@ library(purrr)
 library(tibble)
 library(codetools) # there was a weird error on connect that needed this
 library(DT)
+# remotes::install_github("ThinkR-open/tidyversedashboard", ref = "thinkr-repo")
 library(tidyversedashboard)
 library(tidyr)
 library(sparkline)
