@@ -16,7 +16,7 @@ params:
     input: date
   orgs:
     label: GitHub organizations
-    value: tidyverse, r-lib, r-dbi, tidymodels
+    value: ThinkR-open, statnmap, colinfay, VincentGuyader, Cervangirard, MargotBr, DianeBeldame
     input: text
   privacy:
     label: Repository Privacy
